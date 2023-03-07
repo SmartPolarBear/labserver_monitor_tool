@@ -7,15 +7,16 @@ import notification
 
 with open('conf.yaml', 'r') as f:
     conf = yaml.safe_load(f)
-
-print(conf)
-
-conf=conf['config']
+    print(conf)
 
 while True:
+    with open('conf.yaml', 'r') as f:
+        conf = yaml.safe_load(f)
+        
+    conf=conf['config']
 
     check_proc.check(conf)
     check_gpu.check(conf)
 
-    time.sleep(5)
+    time.sleep(3600)
 
