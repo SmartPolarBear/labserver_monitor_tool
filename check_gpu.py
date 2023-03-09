@@ -27,6 +27,7 @@ def check(conf):
     msg=dict()
     msg['title']="Free GPU Available"
     msg['content']=','.join([str(f) for f in free])
+    msg['content']+='is available now.'
     notification.notify(conf,msg)
 
 
