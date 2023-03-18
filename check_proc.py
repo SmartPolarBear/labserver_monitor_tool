@@ -23,7 +23,7 @@ def check(conf):
     msg=dict()
     msg['title']="Process Ended"
     msg['content']=','.join([str(e) for e in not_running])
-    msg['content']+='are not running now.'
+    msg['content']+=' is/are not running now.'
     notification.notify(conf,msg)
 
 

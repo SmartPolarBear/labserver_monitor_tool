@@ -18,6 +18,8 @@ with open('conf.yaml', 'r') as f:
     print(conf)
 
 while True:
+    print("Running checks")
+
     with open('conf.yaml', 'r') as f:
         conf = yaml.safe_load(f)
         
