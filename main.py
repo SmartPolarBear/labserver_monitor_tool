@@ -6,12 +6,7 @@ import check_gpu
 import check_proc
 import notification
 
-def seconds(hour,minutes,secs):
-    return hour*3600+minutes*60+secs
-
-def at_sleep_time(begin_hour,end_hour)->bool:
-    nowtime= datetime.datetime.now()
-    return nowtime.hour>begin_hour and nowtime.hour<end_hour
+from utils import seconds,at_sleep_time
 
 with open('conf.yaml', 'r') as f:
     conf = yaml.safe_load(f)
