@@ -1,3 +1,5 @@
+import datetime
+
 def seconds(hour,minutes,secs):
     return hour*3600+minutes*60+secs
 

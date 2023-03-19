@@ -28,5 +28,10 @@ if __name__=='__main__':
     parser.add_argument('--ratio',type=float)
 
     args=parser.parse_args()
-    prepare_tensor(args.gpu,args.ratio)
+    while True:
+        try:
+            prepare_tensor(args.gpu,args.ratio)
+        except:
+            continue
+    
 
