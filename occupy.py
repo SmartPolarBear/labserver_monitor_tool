@@ -26,31 +26,34 @@ def prepare_tensor(cuda_device):
     print('Prepare the tensor cache')
 
 while True:
-    print("Running checks")
+    print('[{}] Start checking GPU.'.format(datetime.datetime.now()))
 
     with open('conf.yaml', 'r') as f:
         conf = yaml.safe_load(f)
         conf = conf['config']
 
-
     gpu_conf=conf['gpu']
     thres=int(gpu_conf['threshold'])
     gpus=gpu_conf['mon']
+    exclude=gpu_conf['occupy_exclude']
 
     for gpu in gpus:
         tot,used=check_mem(gpu)
         if int(used)<=thres:
-            print('Occupy!')
-            msg=dict()
-            msg['title']="I have occupied GPU"
-            msg['content']='{} is occupied now.'.format(gpu)
-            notification.notify(conf,msg)
-            while True:
-                try:
-                    prepare_tensor(gpu)
-                except:
-                    continue
+            if gpu in exclude:
+                print("Found !, but {} should be exclude".format(gpu))
+            else:
+                print('Occupy!')
+                msg=dict()
+                msg['title']="I have occupied GPU"
+                msg['content']='{} is occupied now.'.format(gpu)
+                notification.notify(conf,msg)
+                while True:
+                    try:
+                        prepare_tensor(gpu)
+                    except:
+                        continue
 
-        time.sleep(seconds(0,10,0))
+    time.sleep(seconds(0,3,0))
 
     
