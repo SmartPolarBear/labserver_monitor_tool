@@ -15,6 +15,7 @@ def check_mem(cuda_device):
     return total, used
 
 def prepare_tensor(cuda_device):
+    os.environ["CUDA_VISIBLE_DEVICES"] = cuda_device
     total, used = check_mem(cuda_device)
     total = int(total)
     used = int(used)
