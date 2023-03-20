@@ -41,31 +41,35 @@ def check(conf):
     print('[{}] Start checking GPU.'.format(datetime.datetime.now()))
     gpu_conf=conf['gpu']
     thres=int(gpu_conf['threshold'])
-    gpus=gpu_conf['mon']
     
-    free=[]
-    for gpu in gpus:
-        tot,used=check_mem(gpu)
-        if int(used)<=thres:
-            free.append(gpu)
+    gpus=gpu_conf['mon']
+    if len(gpus)>=1:
+        print("There are GPUS to check availability!")
+        free=[]
+        for gpu in gpus:
+            tot,used=check_mem(gpu)
+            if int(used)<=thres:
+                free.append(gpu)
 
-    if len(free)>=1:
-        msg=dict()
-        msg['title']="Free GPU Available"
-        msg['content']=','.join([str(f) for f in free])
-        msg['content']+=' is/are available now.'
-        notification.notify(conf,msg)
-
-    mon_user_gpus=gpu_conf['mon_user']
-    for gpu in mon_user_gpus:
-        users = query_users(gpu)
-        if len(users)>=2:
+        if len(free)>=1:
             msg=dict()
-            msg['title']="GPU Users for {}".format(gpu)
-            msg['content']=','.join([str(f) for f in users])
-            msg['content']+=' is/are using this gpu now.'
+            msg['title']="Free GPU Available"
+            msg['content']=','.join([str(f) for f in free])
+            msg['content']+=' is/are available now.'
             notification.notify(conf,msg)
 
+    mon_user_gpus=gpu_conf['mon_user']
+    if len(mon_user_gpus)>=1:
+        print("There are GPUs to check users.")
+        msg=dict()
+        msg['title']="GPU Users Report"
+        msg['content'] = "Here's gpu user report.\n"
+        for gpu in mon_user_gpus:
+            users = query_users(gpu)
+            if len(users)>=2:
+                msg['content']+=','.join([str(f) for f in users])
+                msg['content']+=' is/are using gpu {} now.\n'.format(gpu)
+        notification.notify(conf,msg)
 
 if __name__=="__main__":
     print("query_users",query_users(0))
