@@ -64,12 +64,15 @@ def check(conf):
         msg=dict()
         msg['title']="GPU Users Report"
         msg['content'] = "Here's gpu user report.\n"
+        count=0
         for gpu in mon_user_gpus:
-            users = query_users(gpu)
+            users = list(set(query_users(gpu)))
             if len(users)>=2:
+                count += 1
                 msg['content']+=','.join([str(f) for f in users])
                 msg['content']+=' is/are using gpu {} now.\n'.format(gpu)
-        notification.notify(conf,msg)
+        if count != 0:
+            notification.notify(conf,msg)
 
 if __name__=="__main__":
     print("query_users",query_users(0))

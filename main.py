@@ -20,8 +20,15 @@ while True:
         
     conf=conf['config']
 
-    check_proc.check(conf)
-    check_gpu.check(conf)
+    try:
+        check_proc.check(conf)
+    except:
+        print('Fail to check proc.')
+
+    try:
+        check_gpu.check(conf)
+    except:
+        print('Fail to check GPU')
 
     if at_sleep_time(conf['sleep']['begin'],conf['sleep']['end']):
         time.sleep(seconds(2,0,0))

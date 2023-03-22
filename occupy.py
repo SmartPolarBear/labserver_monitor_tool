@@ -41,7 +41,7 @@ while True:
         tot,used=check_mem(gpu)
         if int(used)<=thres:
             if gpu in exclude:
-                print("Found !, but {} should be exclude".format(gpu))
+                print("Found! but {} should be exclude".format(gpu))
             else:
                 print('Occupy!')
                 msg=dict()
@@ -51,7 +51,8 @@ while True:
                 while True:
                     try:
                         prepare_tensor(gpu)
-                    except:
+                    except Exception as e:
+                        print(str(e))
                         continue
 
     time.sleep(seconds(0,3,0))
