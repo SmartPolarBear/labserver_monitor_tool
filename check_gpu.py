@@ -5,12 +5,15 @@ import pwd
 import notification
 
 def get_proc_user_name(pid):
-    proc_stat_file = os.stat("/proc/{}".format(str(pid).strip()))
-    # get UID via stat call
-    uid = proc_stat_file.st_uid
-    # look up the username from uid
-    username = pwd.getpwuid(uid)[0]
-    return username
+    try:
+        proc_stat_file = os.stat("/proc/{}".format(str(pid).strip()))
+        # get UID via stat call
+        uid = proc_stat_file.st_uid
+        # look up the username from uid
+        username = pwd.getpwuid(uid)[0]
+        return username
+    except:
+        return "<unknown user>"
 
 def check_mem(cuda_device):
     devices_info = os.popen(
@@ -66,11 +69,14 @@ def check(conf):
         msg['content'] = "Here's gpu user report.\n"
         count=0
         for gpu in mon_user_gpus:
-            users = list(set(query_users(gpu)))
-            if len(users)>=2:
-                count += 1
-                msg['content']+=','.join([str(f) for f in users])
-                msg['content']+=' is/are using gpu {} now.\n'.format(gpu)
+            try:
+                users = list(set(query_users(gpu)))
+                if len(users)>=1:
+                    count += 1
+                    msg['content']+=','.join([str(f) for f in users])
+                    msg['content']+=' is/are using gpu {} now.\n'.format(gpu)
+            except:
+                msg['content']+='{} cannot be monitored.\n'.format(gpu)
         if count != 0:
             notification.notify(conf,msg)
 
